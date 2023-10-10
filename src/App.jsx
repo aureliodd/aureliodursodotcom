@@ -18,6 +18,18 @@ function App() {
   const [myMessage, setMyMessage] = useState('');
 
   const currentYear = 1900 + new Date().getYear() 
+  let i = 0
+
+  useEffect(() => {
+    const messageUpdateInterval = setInterval(() => {
+      // Aggiorna myMessage con il nuovo valore desiderato
+      setMyMessage('Nuovo messaggio ogni '+ i +' secondi');
+      i++
+    }, 1000);
+
+    // Pulisci l'intervallo quando il componente viene smontato
+    return () => clearInterval(messageUpdateInterval);
+  }, []);
 
   // useEffect(() => {
   //   window.addEventListener('scroll', handleScroll, { passive: true });
