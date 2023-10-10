@@ -1,4 +1,4 @@
-import './App.css'
+import './App.scss'
 import { useEffect, useState } from 'react'
 
 import me from './assets/me.jpg'
@@ -15,6 +15,7 @@ function App() {
 
   // const [scrollPosition, setScrollPosition] = useState(0);
   const [qualityIndex, setQualityIndex] = useState(0);
+  const [myMessage, setMyMessage] = useState('');
 
   const currentYear = 1900 + new Date().getYear() 
 
@@ -34,9 +35,12 @@ function App() {
       
 
       <section>
-        {/* <div className="bubble grow left">
-
-        </div> */}
+  
+        <div>
+          <div className="bubble medium bottom">
+            {myMessage}
+          </div>
+        </div>
 
         <img className="myPic" src={me} />
         <div className="myName">
