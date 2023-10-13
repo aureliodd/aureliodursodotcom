@@ -38,6 +38,29 @@
   margin-top: 20px;
 }
 
+.cursor {
+	background-color: black;
+	display: inline-block;
+	width: 10px;
+	height: 17px;
+	margin-left: -15px;
+	animation-name: example;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+}
+
+@keyframes example {
+	0%   {background-color:black;}
+	25%   {background-color:black;}
+	50%   {background-color:black;}
+	75%   {background-color:white;}
+	100%   {background-color:white;}
+}
+
+.hidden {
+	display: none;
+}
+
 
 // Parte custom per bubble
 
@@ -179,4 +202,8 @@ $bubble-border: 0 -1*$px $white,
 			-1*$px -2*$px $black,
 			0 -1*$px $white;
 	}
+}
+
+.bubble:hover {
+	cursor: pointer;	
 }

@@ -6,59 +6,87 @@ import instagram from './assets/instagram.png'
 import linkedin from './assets/linkedin.png'
 import github from './assets/github.png'
 
+const MYMESSAGES = [
+  'Test 1',
+  'Test 2',
+  'Test 3',
+  'Test 4',
+  'Test 5',
+]
+
 const QUALITIES = [
-  'Web Developer',
-  'App Developer'
+  'Web & App Developer',
+  'Data management & integration consultant'
 ]
 
 function App() {
+  
+  const [messageIndex, setMessageIndex] = useState(0)
+  const [myMessage, setMyMessage] = useState(MYMESSAGES[messageIndex])
+  const [cursorClassName,setCursorClassName] = useState('cursor')
 
-  // const [scrollPosition, setScrollPosition] = useState(0);
-  const [qualityIndex, setQualityIndex] = useState(0);
-  const [myMessage, setMyMessage] = useState('');
+  
+  const currentYear = 1900 + new Date().getYear()
+  
+  //   useEffect(() => {
+  //     const messageUpdateInterval = setInterval(updateMyMessage, 2000);
+  //     return () => clearInterval(messageUpdateInterval);
+  // }, [messageIndex]);
 
-  const currentYear = 1900 + new Date().getYear() 
-  let i = 0
 
-  useEffect(() => {
-    const messageUpdateInterval = setInterval(() => {
-      // Aggiorna myMessage con il nuovo valore desiderato
-      setMyMessage('Nuovo messaggio ogni '+ i +' secondi');
-      i++
-    }, 1000);
+  const updateMyMessage = async () => {
 
-    // Pulisci l'intervallo quando il componente viene smontato
-    return () => clearInterval(messageUpdateInterval);
-  }, []);
+    if(MYMESSAGES.length < messageIndex + 1) { return }
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll, { passive: true });
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, []);
+    let currentWord = myMessage
 
-  // function handleScroll() {
-  //   setScrollPosition(window.pageYOffset)
-  // }
+    if(myMessage.length > 0) {
+      while(currentWord.length > 0) {
+        currentWord = currentWord.substring(0, currentWord.length - 1)
+        await new Promise(resolve => setTimeout(resolve, 30));
+        setMyMessage(currentWord)
+      }
+    }
+
+    if(messageIndex + 1 > MYMESSAGES.length - 1) {
+      currentWord = '...'
+    } else {
+      currentWord = MYMESSAGES[messageIndex + 1]
+    }
+    let j = 0
+
+    while(j <= currentWord.length) {
+      await new Promise(resolve => setTimeout(resolve, 50));
+      setMyMessage(currentWord.substring(0, j))
+      j++
+    }
+
+
+    if(MYMESSAGES.length - 1  < messageIndex + 1) {
+      setCursorClassName('hidden')
+    }
+
+    setMessageIndex(messageIndex + 1)
+  }
 
   return (
     <div className="container">
 
       <header> {/* Empty. For future use? */} </header>
-      
 
       <section>
   
-        <div>
+        <div onClick={updateMyMessage}>
           <div className="bubble medium bottom">
-            {myMessage}
+            {myMessage} <div className={cursorClassName}></div>
           </div>
         </div>
 
         <img className="myPic" src={me} />
         <div className="myName">
-          <p>AURELIO DURSO</p>
+          <p>AURELIO D'URSO</p>
         </div>
-        <p>{QUALITIES[qualityIndex]}</p>
+        <p>{QUALITIES[0]}</p>
 
         <div className="social">
           <a href="http://github.com/aureliodd" rel='noreferrer' target='_blank'>
