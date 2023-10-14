@@ -28,10 +28,10 @@ function App() {
   
   const currentYear = 1900 + new Date().getYear()
   
-  //   useEffect(() => {
-  //     const messageUpdateInterval = setInterval(updateMyMessage, 2000);
-  //     return () => clearInterval(messageUpdateInterval);
-  // }, [messageIndex]);
+    useEffect(() => {
+      const messageUpdateInterval = setInterval(updateMyMessage, 5000);
+      return () => clearInterval(messageUpdateInterval);
+  }, [messageIndex]);
 
 
   const updateMyMessage = async () => {
