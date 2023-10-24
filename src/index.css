@@ -20,7 +20,6 @@ body {
   max-height: 100vh;
   height: 100vh;
   background-color: #506d8f;
-  background: radial-gradient(circle, rgba(129,112,119,1) 0%, rgba(80,109,143,1) 100%);
   color: white;
   /* display: flex;
   place-items: center; */

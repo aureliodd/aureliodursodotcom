@@ -31,6 +31,49 @@
   align-content: space-between;
 }
 
+.autumn {
+	background: radial-gradient(
+		circle,
+		rgba(129,112,119,1) 0%,
+		rgba(80,109,143,1) 100%
+	);
+}
+
+.winter {
+	background: linear-gradient(
+		45deg, 
+		rgb(3, 56, 126) 0%,
+		rgb(116, 146, 180) 100%
+	);
+}
+
+.summer {
+	background-image: linear-gradient(
+		orange,
+		yellow,
+		white
+	);
+	color: black;
+}
+
+.spring {
+	background: linear-gradient(
+		-45deg,
+		rgb(196, 114, 221) 0%,
+		rgb(119, 222, 126) 100%
+	);
+	color: black;
+}
+
+.christmas {
+	background: linear-gradient(
+		to right, 
+		rgb(223, 55, 55), 
+		rgb(255, 255, 255)
+	);
+	color: black;
+}
+
 .myPic {
   border-radius: 100%;
   width: 250px
@@ -44,6 +87,11 @@
 .social {
   display: inline-block;
   border-top: 1px solid white;
+}
+
+.summer .social, .christmas .social {
+  display: inline-block;
+  border-top: 1px solid rgb(0, 0, 0);
 }
 
 .social img {

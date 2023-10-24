@@ -7,11 +7,16 @@ import linkedin from './assets/linkedin.png'
 import github from './assets/github.png'
 
 const MYMESSAGES = [
-  'Test 1',
-  'Test 2',
-  'Test 3',
-  'Test 4',
-  'Test 5',
+  'Sto giocando a Super Mario Wonder',
+  'Che freddo...',
+  'Ti piace lo sfondo?',
+  'È dinamico!',
+  'Cambia in base al periodo dell\'anno.',
+  'Anche per le festività.',
+  'Spero ti piaccia...',
+  '...anche perché...',
+  '...ho impiegato un pomeriggio a programmarlo.',
+  'Monkey D. Luffy',
 ]
 
 const QUALITIES = [
@@ -23,14 +28,19 @@ function App() {
   
   const [messageIndex, setMessageIndex] = useState(0)
   const [myMessage, setMyMessage] = useState(MYMESSAGES[messageIndex])
-  const [cursorClassName,setCursorClassName] = useState('cursor')
+  const [cursorClassName, setCursorClassName] = useState('cursor')
+  const [currentTheme, setCurrentTheme] = useState('container')
 
   
   const currentYear = 1900 + new Date().getYear()
+
+  useEffect(() => {
+    setCurrentTheme(currentTheme + ' ' + getPeriodOfTheYear())
+  }, [])
   
-    useEffect(() => {
-      const messageUpdateInterval = setInterval(updateMyMessage, 5000);
-      return () => clearInterval(messageUpdateInterval);
+  useEffect(() => {
+    const messageUpdateInterval = setInterval(updateMyMessage, 5000);
+    return () => clearInterval(messageUpdateInterval);
   }, [messageIndex]);
 
 
@@ -69,8 +79,51 @@ function App() {
     setMessageIndex(messageIndex + 1)
   }
 
+  const getPeriodOfTheYear = () => {
+
+    const today = new Date()
+
+    // today.setDate(today.getDate() + 1) // Testing delle stagioni
+
+    const seasons = [{
+      name: 'spring',
+      start: new Date(currentYear, 2, 21),
+      end: new Date(currentYear, 5, 20)
+  },{
+      name: 'summer',
+      start: new Date(currentYear, 5, 21),
+      end: new Date(currentYear, 8, 20)
+  },{
+      name: 'autumn',
+      start: new Date(currentYear, 8, 21),
+      end: new Date(currentYear, 11, 20)
+  },{
+      // non ci entrerà mai ma vbb
+      name: 'winter',
+      start: new Date(today.getMonth() > 3 ? currentYear : currentYear - 1, 11, 21),
+      end: new Date(today.getMonth() > 3 ? currentYear + 1 : currentYear, 2, 20)
+  },{
+      name: 'christmas',
+      exactDate: new Date(currentYear, 11, 25),
+  }];
+
+    let classN = ''
+
+    seasons.forEach(s => {
+      if (today >= s.start && today < s.end) {
+        classN = s.name
+      }
+      if(s.exactDate != null && s.exactDate.getDate() == today.getDate() && s.exactDate.getMonth() == today.getMonth()) {
+        classN = s.name
+        return
+      }
+    })
+
+    return(classN)
+  }
+
   return (
-    <div className="container">
+    <div className={currentTheme}>
 
       <header> {/* Empty. For future use? */} </header>
 
