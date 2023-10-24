@@ -76,7 +76,7 @@ function App() {
 
       <section>
   
-        <div onClick={updateMyMessage}>
+        <div onClick={updateMyMessage} className='fadeIn'>
           <div className="bubble medium bottom">
             {myMessage} <div className={cursorClassName}></div>
           </div>
