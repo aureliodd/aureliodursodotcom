@@ -101,7 +101,7 @@ function App() {
         </div>
       </section>
 
-      <footer>
+      <footer className='footer'>
         aureliodurso.com © {currentYear}. All rights reserved.
       </footer>
       
