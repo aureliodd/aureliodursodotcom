@@ -1,28 +1,12 @@
 import './App.scss'
 import { useEffect, useState } from 'react'
+import { SECOND, QUALITIES, MYMESSAGES, SPECIALMESSAGES, SEASONS, WORDDELETIONTIME, WORDWRITETIME } from './constants/constants.js'
+import { getPeriodOfTheYear } from './classes/utils'
 
 import me from './assets/me.jpg'
 import instagram from './assets/instagram.png'
 import linkedin from './assets/linkedin.png'
 import github from './assets/github.png'
-
-const MYMESSAGES = [
-  {message: ' ', time: 300},
-  {message: 'Ciao!', time: 10000},
-  {message: 'Sto giocando a Super Mario Wonder', time: 10000},
-  {message: 'Ti piace lo sfondo?', time: 3000},
-  {message: 'È dinamico!', time: 2000},
-  {message: 'Cambia in base al periodo dell\'anno.', time: 3000},
-  {message: 'Anche per le festività.', time: 3000},
-  {message: 'Spero ti piaccia', time: 3000},
-  {message: '...anche perché...', time: 3000},
-  {message: 'ho impiegato un pomeriggio intero a programmarlo', time: 4000},
-]
-
-const QUALITIES = [
-  'Web & App Developer',
-  'Data management & integration consultant'
-]
 
 function App() {
   
@@ -36,7 +20,7 @@ function App() {
   const [qualityStyle, setQualitystyle] = useState('')
   
   
-  const currentYear = 1900 + new Date().getYear()
+  // const currentYear = new Date().getFullYear()
 
   useEffect(() => {
     setCurrentTheme(currentTheme + ' ' + getPeriodOfTheYear())
@@ -48,7 +32,7 @@ function App() {
       setMessageIndex(newIndex)
       updateMyMessage(newIndex)
 
-    }, MYMESSAGES[messageIndex] != null ? MYMESSAGES[messageIndex].time  : 10000);
+    }, MYMESSAGES[messageIndex] != null ? (MYMESSAGES[messageIndex].message.length * (WORDDELETIONTIME + WORDWRITETIME) * SECOND + MYMESSAGES[messageIndex].time * SECOND) : 10 * SECOND);
 
     return () => {
       clearTimeout(timer);
@@ -60,19 +44,21 @@ function App() {
       const newIndex = (currentQualityIndex + 1) % QUALITIES.length;
       setCurrentQualityIndex(newIndex)
       updateQuality(newIndex)
-    }, 5000);
+    }, 5 * SECOND);
     return () => { clearTimeout(timer); };
   }, [currentQualityIndex]);
 
   const updateQuality = async (newIndex) => {
     setQualitystyle('qualityFadeOut')
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 0.5 * SECOND));
     setQuality(QUALITIES[newIndex])
     setQualitystyle('qualityFadeIn')
   }
 
 
   const updateMyMessage = async (newIndex) => {
+
+    console.log('i: ' + newIndex + ', ' + JSON.stringify(MYMESSAGES[newIndex]))
     
     if(newIndex > MYMESSAGES.length ) { return }
 
@@ -80,97 +66,34 @@ function App() {
     if( currentWord ) {
       while(currentWord.length > 0) {
         currentWord = currentWord.substring(0, currentWord.length - 1)
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await new Promise(resolve => setTimeout(resolve, WORDDELETIONTIME * SECOND));
         setMyMessage(currentWord)
       }
     }
 
-    if(newIndex == MYMESSAGES.length) {
+    if(newIndex > MYMESSAGES.length - 1) {
       currentWord = '...'
     } else {
+      // if(newIndex == 1) {
+      //   aux = SPECIALMESSAGES.filter((element) => {
+      //     today.getTime() >= new Date(element.start.getTime()) && today.getTime() < s.end.getTime()
+      //   })
+      //   current
+      // }
       currentWord = MYMESSAGES[newIndex].message
     }
 
     let j = 0
 
     while(j <= currentWord.length) {
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, WORDWRITETIME * SECOND));
       setMyMessage(currentWord.substring(0, j))
       j++
     }
 
-
     if(MYMESSAGES.length - 1  < newIndex) {
       setCursorClassName('hidden')
     }
-
-    // setMessageIndex(messageIndex + 1)
-  }
-
-  const getPeriodOfTheYear = () => {
-
-    const today = new Date()
-    // const today = new Date('Mar 21 2023') // Spring
-    // const today = new Date('Jun 21 2023') // Summer
-    // const today = new Date('Sep 21 2023') // Autumn
-    // const today = new Date('Dec 21 2023') // Winter
-
-    // const today = new Date('Dec 25 2023') // Christmas
-
-    console.log(today)
-
-    const seasons = [{
-      name: 'spring',
-      start: new Date(currentYear, 2, 21),
-      end: new Date(currentYear, 5, 20)
-  },{
-      name: 'summer',
-      start: new Date(currentYear, 5, 21),
-      end: new Date(currentYear, 8, 20)
-  },{
-      name: 'autumn',
-      start: new Date(currentYear, 8, 21),
-      end: new Date(currentYear, 11, 20)
-  },{
-      // non ci entrerà mai ma vbb
-      name: 'winter',
-      start: new Date(today.getMonth() > 3 ? currentYear : currentYear - 1, 11, 21),
-      end: new Date(today.getMonth() > 3 ? currentYear + 1 : currentYear, 2, 20)
-  },{
-      name: 'christmas',
-      start: new Date(currentYear, 11, 24),
-      end: new Date(currentYear, 11, 30)
-  }];
-
-    let classN = []
-
-    seasons.forEach(s => {
-      if (today.getTime() >= s.start.getTime() && today.getTime() < s.end.getTime()) {
-        classN.push(s)
-      }
-    })
-
-    let narrower
-
-    switch (classN.length) {
-      case 0:
-        break
-      case 1:
-        narrower = classN[0]
-        break
-      default:
-        for (const i in classN) {
-          if(narrower == null) {
-            narrower = classN[i]
-          } else {
-            if (narrower.end.getTime() - narrower.start.getTime() > classN[i].end.getTime() - classN[i].start.getTime()) {
-              narrower = classN[i]
-            }
-          }
-        }
-        break
-    }
-    return(narrower.name)
   }
 
   return (
@@ -206,7 +129,7 @@ function App() {
       </section>
 
       <footer className='footer'>
-        aureliodurso.com © {currentYear}. All rights reserved.
+        aureliodurso.com © {new Date().getFullYear()}. All rights reserved.
       </footer>
       
     </div>
