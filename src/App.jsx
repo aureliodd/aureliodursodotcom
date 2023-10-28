@@ -8,7 +8,7 @@ import github from './assets/github.png'
 
 const MYMESSAGES = [
   {message: ' ', time: 300},
-  {message: 'Ciao!', time: 5000},
+  {message: 'Ciao!', time: 10000},
   {message: 'Sto giocando a Super Mario Wonder', time: 10000},
   {message: 'Ti piace lo sfondo?', time: 3000},
   {message: 'È dinamico!', time: 2000},
@@ -16,8 +16,7 @@ const MYMESSAGES = [
   {message: 'Anche per le festività.', time: 3000},
   {message: 'Spero ti piaccia', time: 3000},
   {message: '...anche perché...', time: 3000},
-  {message: 'ho impiegato un pomeriggio intero a programmarlo', time: 3000},
-  {message: '...', time: 3000}
+  {message: 'ho impiegato un pomeriggio intero a programmarlo', time: 4000},
 ]
 
 const QUALITIES = [
@@ -45,11 +44,11 @@ function App() {
   
   useEffect(() => {
     const timer = setTimeout(() => {
-      const newIndex = (messageIndex + 1) % MYMESSAGES.length;
+      const newIndex = (messageIndex + 1);
       setMessageIndex(newIndex)
       updateMyMessage(newIndex)
 
-    }, MYMESSAGES[messageIndex].time);
+    }, MYMESSAGES[messageIndex] != null ? MYMESSAGES[messageIndex].time  : 10000);
 
     return () => {
       clearTimeout(timer);
@@ -59,7 +58,6 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       const newIndex = (currentQualityIndex + 1) % QUALITIES.length;
-      console.log('quality: ' + newIndex)
       setCurrentQualityIndex(newIndex)
       updateQuality(newIndex)
     }, 5000);
@@ -75,14 +73,10 @@ function App() {
 
 
   const updateMyMessage = async (newIndex) => {
-
-    console.log(newIndex)
-    if(MYMESSAGES.length < messageIndex + 1) { return }
+    
+    if(newIndex > MYMESSAGES.length ) { return }
 
     let currentWord = MYMESSAGES[newIndex - 1].message
-
-    console.log(currentWord)
-
     if( currentWord ) {
       while(currentWord.length > 0) {
         currentWord = currentWord.substring(0, currentWord.length - 1)
@@ -91,12 +85,12 @@ function App() {
       }
     }
 
-    if(newIndex > MYMESSAGES.length - 1) {
+    if(newIndex == MYMESSAGES.length) {
       currentWord = '...'
     } else {
       currentWord = MYMESSAGES[newIndex].message
     }
-    console.log(currentWord)
+
     let j = 0
 
     while(j <= currentWord.length) {
@@ -115,11 +109,11 @@ function App() {
 
   const getPeriodOfTheYear = () => {
 
-    // const today = new Date()
+    const today = new Date()
     // const today = new Date('Mar 21 2023') // Spring
     // const today = new Date('Jun 21 2023') // Summer
     // const today = new Date('Sep 21 2023') // Autumn
-    const today = new Date('Dec 21 2023') // Winter
+    // const today = new Date('Dec 21 2023') // Winter
 
     // const today = new Date('Dec 25 2023') // Christmas
 
