@@ -7,16 +7,17 @@ import linkedin from './assets/linkedin.png'
 import github from './assets/github.png'
 
 const MYMESSAGES = [
-  'Sto giocando a Super Mario Wonder',
-  'Che freddo...',
-  'Ti piace lo sfondo?',
-  'È dinamico!',
-  'Cambia in base al periodo dell\'anno.',
-  'Anche per le festività.',
-  'Spero ti piaccia...',
-  '...anche perché...',
-  '...ho impiegato un pomeriggio a programmarlo.',
-  'Monkey D. Luffy',
+  {message: ' ', time: 300},
+  {message: 'Ciao!', time: 5000},
+  {message: 'Sto giocando a Super Mario Wonder', time: 10000},
+  {message: 'Ti piace lo sfondo?', time: 3000},
+  {message: 'È dinamico!', time: 2000},
+  {message: 'Cambia in base al periodo dell\'anno.', time: 3000},
+  {message: 'Anche per le festività.', time: 3000},
+  {message: 'Spero ti piaccia', time: 3000},
+  {message: '...anche perché...', time: 3000},
+  {message: 'ho impiegato un pomeriggio intero a programmarlo', time: 3000},
+  {message: '...', time: 3000}
 ]
 
 const QUALITIES = [
@@ -27,10 +28,14 @@ const QUALITIES = [
 function App() {
   
   const [messageIndex, setMessageIndex] = useState(0)
-  const [myMessage, setMyMessage] = useState(MYMESSAGES[messageIndex])
+  const [myMessage, setMyMessage] = useState(MYMESSAGES[0].message)
   const [cursorClassName, setCursorClassName] = useState('cursor')
   const [currentTheme, setCurrentTheme] = useState('container')
 
+  const [currentQualityIndex, setCurrentQualityIndex] = useState(0)
+  const [quality, setQuality] = useState(QUALITIES[0])
+  const [qualityStyle, setQualitystyle] = useState('')
+  
   
   const currentYear = 1900 + new Date().getYear()
 
@@ -39,18 +44,46 @@ function App() {
   }, [])
   
   useEffect(() => {
-    const messageUpdateInterval = setInterval(updateMyMessage, 5000);
-    return () => clearInterval(messageUpdateInterval);
+    const timer = setTimeout(() => {
+      const newIndex = (messageIndex + 1) % MYMESSAGES.length;
+      setMessageIndex(newIndex)
+      updateMyMessage(newIndex)
+
+    }, MYMESSAGES[messageIndex].time);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [messageIndex]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const newIndex = (currentQualityIndex + 1) % QUALITIES.length;
+      console.log('quality: ' + newIndex)
+      setCurrentQualityIndex(newIndex)
+      updateQuality(newIndex)
+    }, 5000);
+    return () => { clearTimeout(timer); };
+  }, [currentQualityIndex]);
 
-  const updateMyMessage = async () => {
+  const updateQuality = async (newIndex) => {
+    setQualitystyle('qualityFadeOut')
+    await new Promise(resolve => setTimeout(resolve, 500));
+    setQuality(QUALITIES[newIndex])
+    setQualitystyle('qualityFadeIn')
+  }
 
+
+  const updateMyMessage = async (newIndex) => {
+
+    console.log(newIndex)
     if(MYMESSAGES.length < messageIndex + 1) { return }
 
-    let currentWord = myMessage
+    let currentWord = MYMESSAGES[newIndex - 1].message
 
-    if(myMessage.length > 0) {
+    console.log(currentWord)
+
+    if( currentWord ) {
       while(currentWord.length > 0) {
         currentWord = currentWord.substring(0, currentWord.length - 1)
         await new Promise(resolve => setTimeout(resolve, 30));
@@ -58,11 +91,12 @@ function App() {
       }
     }
 
-    if(messageIndex + 1 > MYMESSAGES.length - 1) {
+    if(newIndex > MYMESSAGES.length - 1) {
       currentWord = '...'
     } else {
-      currentWord = MYMESSAGES[messageIndex + 1]
+      currentWord = MYMESSAGES[newIndex].message
     }
+    console.log(currentWord)
     let j = 0
 
     while(j <= currentWord.length) {
@@ -72,18 +106,24 @@ function App() {
     }
 
 
-    if(MYMESSAGES.length - 1  < messageIndex + 1) {
+    if(MYMESSAGES.length - 1  < newIndex) {
       setCursorClassName('hidden')
     }
 
-    setMessageIndex(messageIndex + 1)
+    // setMessageIndex(messageIndex + 1)
   }
 
   const getPeriodOfTheYear = () => {
 
-    const today = new Date()
+    // const today = new Date()
+    // const today = new Date('Mar 21 2023') // Spring
+    // const today = new Date('Jun 21 2023') // Summer
+    // const today = new Date('Sep 21 2023') // Autumn
+    const today = new Date('Dec 21 2023') // Winter
 
-    // today.setDate(today.getDate() + 1) // Testing delle stagioni
+    // const today = new Date('Dec 25 2023') // Christmas
+
+    console.log(today)
 
     const seasons = [{
       name: 'spring',
@@ -104,22 +144,39 @@ function App() {
       end: new Date(today.getMonth() > 3 ? currentYear + 1 : currentYear, 2, 20)
   },{
       name: 'christmas',
-      exactDate: new Date(currentYear, 11, 25),
+      start: new Date(currentYear, 11, 24),
+      end: new Date(currentYear, 11, 30)
   }];
 
-    let classN = ''
+    let classN = []
 
     seasons.forEach(s => {
-      if (today >= s.start && today < s.end) {
-        classN = s.name
-      }
-      if(s.exactDate != null && s.exactDate.getDate() == today.getDate() && s.exactDate.getMonth() == today.getMonth()) {
-        classN = s.name
-        return
+      if (today.getTime() >= s.start.getTime() && today.getTime() < s.end.getTime()) {
+        classN.push(s)
       }
     })
 
-    return(classN)
+    let narrower
+
+    switch (classN.length) {
+      case 0:
+        break
+      case 1:
+        narrower = classN[0]
+        break
+      default:
+        for (const i in classN) {
+          if(narrower == null) {
+            narrower = classN[i]
+          } else {
+            if (narrower.end.getTime() - narrower.start.getTime() > classN[i].end.getTime() - classN[i].start.getTime()) {
+              narrower = classN[i]
+            }
+          }
+        }
+        break
+    }
+    return(narrower.name)
   }
 
   return (
@@ -129,7 +186,7 @@ function App() {
 
       <section>
   
-        <div onClick={updateMyMessage} className='fadeIn'>
+        <div /*onClick={updateMyMessage}*/ className='fadeIn'>
           <div className="bubble medium bottom">
             {myMessage} <div className={cursorClassName}></div>
           </div>
@@ -139,7 +196,7 @@ function App() {
         <div className="myName">
           <p>AURELIO D'URSO</p>
         </div>
-        <p>{QUALITIES[0]}</p>
+        <p className={qualityStyle}>{quality}</p>
 
         <div className="social">
           <a href="http://github.com/aureliodd" rel='noreferrer' target='_blank'>

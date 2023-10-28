@@ -13,6 +13,18 @@
 	position:relative
 }
 
+.qualityFadeIn {
+		visibility: visible;
+		opacity: 1;
+		transition: opacity 1s linear;
+}
+
+.qualityFadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
 @keyframes fading {
 	0%    { opacity: 0 }
 	100%  { opacity: 1 }
@@ -71,7 +83,8 @@
 		rgb(223, 55, 55), 
 		rgb(255, 255, 255)
 	);
-	color: black;
+	background-image: url('assets/christmas.jpg');
+	color: white;
 }
 
 .myPic {
@@ -89,7 +102,7 @@
   border-top: 1px solid white;
 }
 
-.summer .social, .christmas .social {
+.summer .social {
   display: inline-block;
   border-top: 1px solid rgb(0, 0, 0);
 }
@@ -122,6 +135,10 @@
 
 .hidden {
 	display: none;
+}
+
+.spring .footer {
+	color: black;
 }
 
 .footer {
