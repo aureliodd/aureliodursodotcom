@@ -1,6 +1,6 @@
 import './App.scss'
 import { useEffect, useState } from 'react'
-import { SECOND, QUALITIES, MYMESSAGES, SPECIALMESSAGES, SEASONS, WORDDELETIONTIME, WORDWRITETIME } from './constants/constants.js'
+import { SECOND, QUALITIES, MYMESSAGES, WORDDELETIONTIME, WORDWRITETIME } from './constants/constants.js'
 import { getPeriodOfTheYear } from './classes/utils'
 
 import me from './assets/me.jpg'
@@ -57,8 +57,6 @@ function App() {
 
 
   const updateMyMessage = async (newIndex) => {
-
-    console.log('i: ' + newIndex + ', ' + JSON.stringify(MYMESSAGES[newIndex]))
     
     if(newIndex > MYMESSAGES.length ) { return }
 
@@ -74,12 +72,6 @@ function App() {
     if(newIndex > MYMESSAGES.length - 1) {
       currentWord = '...'
     } else {
-      // if(newIndex == 1) {
-      //   aux = SPECIALMESSAGES.filter((element) => {
-      //     today.getTime() >= new Date(element.start.getTime()) && today.getTime() < s.end.getTime()
-      //   })
-      //   current
-      // }
       currentWord = MYMESSAGES[newIndex].message
     }
 

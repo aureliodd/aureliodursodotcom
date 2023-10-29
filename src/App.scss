@@ -46,7 +46,7 @@
 .autumn {
 	background: radial-gradient(
 		circle,
-		rgba(129,112,119,1) 0%,
+		rgb(182, 125, 91) 0%,
 		rgba(80,109,143,1) 100%
 	);
 }
@@ -61,9 +61,9 @@
 
 .summer {
 	background-image: linear-gradient(
-		orange,
-		yellow,
-		white
+		rgb(242, 177, 56),
+		rgb(158, 158, 58),
+		rgb(211, 139, 100)
 	);
 	color: black;
 }
@@ -137,7 +137,7 @@
 	display: none;
 }
 
-.spring .footer {
+.spring .footer, .summer .footer {
 	color: black;
 }
 

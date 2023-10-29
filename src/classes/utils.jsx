@@ -1,4 +1,4 @@
-import { SECOND, QUALITIES, MYMESSAGES, SPECIALMESSAGES, SEASONS, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
+import { SEASONS } from '../constants/constants.js'
 
 
 export const getPeriodOfTheYear = () => {
@@ -8,11 +8,9 @@ export const getPeriodOfTheYear = () => {
   // const today = new Date('Jun 21 2023') // Summer
   // const today = new Date('Sep 21 2023') // Autumn
   // const today = new Date('Dec 21 2023') // Winter
-
   // const today = new Date('Dec 25 2023') // Christmas
-  const currentYear = today.getFullYear()
 
-  console.log(today)
+  const currentYear = today.getFullYear()
 
   const seasons = SEASONS.map(element => {
     let fromCurrentYearToNext = element.start[1] > element.end[1]
