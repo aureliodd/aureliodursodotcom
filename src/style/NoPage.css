@@ -1,0 +1,12 @@
+.horizVertAlign {
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.card {
+  width: 500px;
+  background-color: rgba(200,200,200,0.1);
+  border-radius: 10px;
+  padding: 30px 30px 80px 30px
+}
