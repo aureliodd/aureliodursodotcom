@@ -2,6 +2,7 @@ import './style/App.scss'
 import { useEffect, useState } from 'react'
 import Home from './pages/Home'
 import NotFound from './pages/NoPage'
+import Work from './pages/Work'
 import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom'
 import { getPeriodOfTheYear } from './classes/utils'
 
@@ -20,6 +21,7 @@ function App() {
       <Router>
         <Routes>
           <Route index element={<Home />} />
+          <Route path="work" element={<Work />}  /> 
           <Route path="*" element={<NotFound />}  /> 
         </Routes>
       </Router>
