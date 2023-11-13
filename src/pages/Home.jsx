@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { SECOND, QUALITIES, MYMESSAGES, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
+import { SECOND, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
 
 import me from '../assets/me.jpg'
 import instagram from '../assets/instagram.png'
@@ -7,6 +7,9 @@ import linkedin from '../assets/linkedin.png'
 import github from '../assets/github.png'
 
 function Home() {
+
+  const MYMESSAGES = JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES || '[]');
+  const QUALITIES = JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES || '[]');
 
   const [myName] = useState('AURELIO D\'URSO')
   
