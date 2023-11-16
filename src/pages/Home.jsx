@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { SECOND, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
+import { Helmet } from 'react-helmet'
+import { MYNAME, SECOND, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
 
 import me from '../assets/me.jpg'
 import instagram from '../assets/instagram.png'
@@ -10,8 +11,6 @@ function Home() {
 
   const MYMESSAGES = JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES || '[]');
   const QUALITIES = JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES || '[]');
-
-  const [myName] = useState('AURELIO D\'URSO')
   
   const [myMessage, setMyMessage] = useState(MYMESSAGES[0].message)
   const [cursorClassName, setCursorClassName] = useState('cursor')
@@ -87,6 +86,11 @@ function Home() {
 
   return (
     <div>
+      <Helmet>
+        <title>{ MYNAME } - Homepage</title>
+        <meta name="description" content="Benvenuti sulla mia pagina personale" />
+        <link rel="canonical" href="http://aureliodurso.com" />
+      </Helmet>
       <section>
         <div /*onClick={updateMyMessage}*/ className='fadeIn'>
           <div className="bubble medium bottom">
@@ -96,7 +100,7 @@ function Home() {
 
         <img className="myPic" src={me} />
         <div className="myName">
-          <p>{myName}</p>
+          <p>{ MYNAME.toUpperCase() }</p>
         </div>
         <p className={qualityStyle}>{quality}</p>
 

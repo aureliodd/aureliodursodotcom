@@ -1,6 +1,7 @@
 export const SECOND = 1000
 export const WORDDELETIONTIME = 0.05
 export const WORDWRITETIME = 0.03
+export const MYNAME = 'Aurelio D\'Urso'
 
 // export const SPECIALMESSAGES = [
 //   {
