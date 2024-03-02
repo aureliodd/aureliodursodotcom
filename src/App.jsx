@@ -28,7 +28,7 @@ function App() {
         </Routes>
       </Router>
       <Box className="footer" {...styles.provaComponent}>
-        palesi.net © {new Date().getFullYear()}. All rights reserved.
+        palesi.net © {new Date().getFullYear()}. All rights reserved. Prova.
       </Box>
     </div>
   )
