@@ -98,7 +98,11 @@ function Home() {
           </div>
         </div>
 
-        <img className="myPic" src={me} />
+        <div className='myPicContainer'>
+          <div className='myPicOuter'>
+            <img className="myPic" src={me} />
+          </div>
+        </div>
         <div className="myName">
           <p>{ MYNAME.toUpperCase() }</p>
         </div>

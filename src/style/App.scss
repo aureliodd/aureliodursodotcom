@@ -87,9 +87,28 @@
 	color: white;
 }
 
+.myPicContainer {
+	overflow: hidden;
+	display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.myPicOuter {
+	overflow: hidden;
+	width: 250px;
+	border-radius: 100%;
+}
+
 .myPic {
   border-radius: 100%;
-  width: 250px
+  width: 250px;
+	transition: transform .2s;
+}
+
+.myPic:hover {
+	transform: scale(1.1);
+	// filter: blur(0.01px);
 }
 
 .myName {
