@@ -104,6 +104,12 @@
   border-radius: 100%;
   width: 250px;
 	transition: transform .2s;
+	-webkit-user-drag: none;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+
 }
 
 .myPic:hover {
