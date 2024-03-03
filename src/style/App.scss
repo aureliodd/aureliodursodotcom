@@ -97,6 +97,7 @@
 .myPicOuter {
 	overflow: hidden;
 	width: 250px;
+	height: 250px;
 	border-radius: 100%;
 }
 
@@ -313,6 +314,6 @@ $bubble-border: 0 -1*$px $white,
 	}
 }
 
-.bubble:hover {
-	cursor: pointer;	
-}
+// .bubble:hover {
+// 	cursor: pointer;	
+// }
