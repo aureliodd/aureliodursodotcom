@@ -43,38 +43,88 @@
   align-content: space-between;
 }
 
+@property --gradient-angle {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
+}
+
+@property --gradient-pos-x {
+	syntax: '<percentage>';
+	inherits: false;
+	initial-value: 50%;
+}
+
+@property --gradient-pos-y {
+	syntax: '<percentage>';
+	inherits: false;
+	initial-value: 50%;
+}
+
+@keyframes rotate-gradient {
+	to { --gradient-angle: 360deg; }
+}
+
+@keyframes drift-gradient {
+	0%   { --gradient-pos-x: 35%; --gradient-pos-y: 30%; }
+	50%  { --gradient-pos-x: 65%; --gradient-pos-y: 70%; }
+	100% { --gradient-pos-x: 35%; --gradient-pos-y: 30%; }
+}
+
 .autumn {
+	--gradient-pos-x: 50%;
+	--gradient-pos-y: 50%;
 	background: radial-gradient(
-		circle,
+		circle at var(--gradient-pos-x) var(--gradient-pos-y),
 		rgb(182, 125, 91) 0%,
 		rgba(80,109,143,1) 100%
 	);
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: drift-gradient 28s ease-in-out infinite;
+	}
 }
 
 .winter {
+	--gradient-angle: 45deg;
 	background: linear-gradient(
-		45deg, 
+		var(--gradient-angle),
 		rgb(3, 56, 126) 0%,
 		rgb(116, 146, 180) 100%
 	);
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: rotate-gradient 40s linear infinite;
+	}
 }
 
 .summer {
+	--gradient-angle: 180deg;
 	background-image: linear-gradient(
+		var(--gradient-angle),
 		rgb(242, 177, 56),
 		rgb(158, 158, 58),
 		rgb(211, 139, 100)
 	);
 	color: black;
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: rotate-gradient 34s linear infinite;
+	}
 }
 
 .spring {
+	--gradient-angle: -45deg;
 	background: linear-gradient(
-		-45deg,
+		var(--gradient-angle),
 		rgb(196, 114, 221) 0%,
 		rgb(119, 222, 126) 100%
 	);
 	color: black;
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: rotate-gradient 36s linear infinite;
+	}
 }
 
 .christmas {
@@ -169,6 +219,103 @@
 
 .footer {
 	color: #a59f9f;
+}
+
+header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 12px 16px;
+}
+
+.headerLeft, .headerRight {
+	display: flex;
+	align-items: center;
+}
+
+.homeLink {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	color: inherit;
+	opacity: 0.75;
+	border-radius: 50%;
+	transition: opacity .15s ease, background-color .15s ease;
+
+	@media (hover: hover) {
+		&:hover {
+			opacity: 1;
+			background-color: rgba(255, 255, 255, 0.15);
+		}
+	}
+
+	&:active {
+		opacity: 1;
+	}
+}
+
+.summer .homeLink, .spring .homeLink {
+	@media (hover: hover) {
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.08);
+		}
+	}
+}
+
+.languageSwitcher {
+	display: flex;
+	gap: 6px;
+}
+
+.languageSwitcher button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 22px;
+	line-height: 1;
+	padding: 8px;
+	opacity: 0.45;
+	transition: opacity .15s ease, transform .15s ease;
+
+	@media (hover: hover) {
+		&:hover {
+			opacity: 0.75;
+		}
+	}
+
+	&.active {
+		opacity: 1;
+		transform: scale(1.15);
+	}
+}
+
+@media (max-width: 480px) {
+	header {
+		padding: 8px 10px;
+		gap: 8px;
+	}
+
+	.homeLink {
+		width: 34px;
+		height: 34px;
+
+		svg {
+			width: 19px;
+			height: 19px;
+		}
+	}
+
+	.languageSwitcher {
+		gap: 2px;
+	}
+
+	.languageSwitcher button {
+		font-size: 19px;
+		padding: 6px;
+	}
 }
 
 

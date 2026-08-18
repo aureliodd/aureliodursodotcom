@@ -34,7 +34,7 @@ export const getPeriodOfTheYear = () => {
     };
   })
 
-  console.log(seasons)
+  // console.log(seasons)
 
   let classN = []
 

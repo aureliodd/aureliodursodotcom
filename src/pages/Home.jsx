@@ -1,18 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { MYNAME, SECOND, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
+import { useLanguage } from '../i18n/LanguageContext'
 
 import me from '../assets/me.jpg'
 import instagram from '../assets/instagram.png'
 import linkedin from '../assets/linkedin.png'
 import github from '../assets/github.png'
 
-const MYMESSAGES = JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES || '[]');
-const QUALITIES = JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES || '[]');
+const MYMESSAGES_BY_LANG = {
+  it: JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES_IT || '[]'),
+  en: JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES_EN || '[]'),
+}
+const QUALITIES_BY_LANG = {
+  it: JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES_IT || '[]'),
+  en: JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES_EN || '[]'),
+}
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function Home() {
+
+  const { language } = useLanguage()
+  const MYMESSAGES = useMemo(() => MYMESSAGES_BY_LANG[language], [language])
+  const QUALITIES = useMemo(() => QUALITIES_BY_LANG[language], [language])
 
   const [myMessage, setMyMessage] = useState(MYMESSAGES[0].message)
   const [cursorClassName, setCursorClassName] = useState('cursor')
@@ -20,6 +31,9 @@ function Home() {
   const [qualityStyle, setQualitystyle] = useState('')
 
   useEffect(() => {
+    setMyMessage(MYMESSAGES[0].message)
+    setCursorClassName('cursor')
+
     let cancelled = false
 
     const typewriter = async () => {
@@ -55,10 +69,12 @@ function Home() {
     typewriter()
 
     return () => { cancelled = true }
-  }, [])
+  }, [MYMESSAGES])
 
 
   useEffect(() => {
+    setQuality(QUALITIES[0])
+
     let cancelled = false
     let index = 0
 
@@ -80,14 +96,13 @@ function Home() {
     rotateQuality()
 
     return () => { cancelled = true }
-  }, [])
+  }, [QUALITIES])
 
 
   return (
     <div>
       <Helmet>
         <title>{ MYNAME } - Homepage</title>
-        <meta name="description" content="Benvenuti sulla mia pagina personale" />
         <link rel="canonical" href="http://aureliodurso.com" />
       </Helmet>
       <section>

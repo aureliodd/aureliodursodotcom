@@ -32,4 +32,3 @@ Package manager is Yarn (`yarn.lock` is present, use `yarn` not `npm`).
 ## Notes
 
 - This is a small, mostly finished personal site — favor minimal, targeted changes over introducing new abstractions, state management, or build tooling.
-- Season/date logic in `getPeriodOfTheYear` has a `console.log(seasons)` left in — be aware it's noisy but intentional-looking legacy debug output, not something to silently "fix" unless asked.
