@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { MYNAME, SECOND, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
 
@@ -10,78 +10,77 @@ import github from '../assets/github.png'
 const MYMESSAGES = JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES || '[]');
 const QUALITIES = JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES || '[]');
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 function Home() {
 
   const [myMessage, setMyMessage] = useState(MYMESSAGES[0].message)
   const [cursorClassName, setCursorClassName] = useState('cursor')
-  const [messageIndex, setMessageIndex] = useState(0)
-  const [currentQualityIndex, setCurrentQualityIndex] = useState(0)
   const [quality, setQuality] = useState(QUALITIES[0])
   const [qualityStyle, setQualitystyle] = useState('')
 
-  const updateQuality = useCallback(async (newIndex) => {
-    setQualitystyle('qualityFadeOut')
-    await new Promise(resolve => setTimeout(resolve, 0.5 * SECOND));
-    setQuality(QUALITIES[newIndex])
-    setQualitystyle('qualityFadeIn')
-  }, [])
+  useEffect(() => {
+    let cancelled = false
 
+    const typewriter = async () => {
+      for (let index = 0; index < MYMESSAGES.length; index++) {
+        const current = MYMESSAGES[index]
 
-  const updateMyMessage = useCallback(async (newIndex) => {
+        await sleep((current.message.length * (WORDDELETIONTIME + WORDWRITETIME) + current.time) * SECOND)
+        if (cancelled) return
 
-    if(newIndex > MYMESSAGES.length ) { return }
+        let currentWord = current.message
+        while (currentWord.length > 0) {
+          currentWord = currentWord.substring(0, currentWord.length - 1)
+          await sleep(WORDDELETIONTIME * SECOND)
+          if (cancelled) return
+          setMyMessage(currentWord)
+        }
 
-    let currentWord = MYMESSAGES[newIndex - 1].message
-    if( currentWord ) {
-      while(currentWord.length > 0) {
-        currentWord = currentWord.substring(0, currentWord.length - 1)
-        await new Promise(resolve => setTimeout(resolve, WORDDELETIONTIME * SECOND));
-        setMyMessage(currentWord)
+        const nextIndex = index + 1
+        const nextWord = nextIndex < MYMESSAGES.length ? MYMESSAGES[nextIndex].message : '...'
+
+        for (let j = 0; j <= nextWord.length; j++) {
+          await sleep(WORDWRITETIME * SECOND)
+          if (cancelled) return
+          setMyMessage(nextWord.substring(0, j))
+        }
+
+        if (nextIndex >= MYMESSAGES.length) {
+          setCursorClassName('hidden')
+        }
       }
     }
 
-    if(newIndex > MYMESSAGES.length - 1) {
-      currentWord = '...'
-    } else {
-      currentWord = MYMESSAGES[newIndex].message
-    }
+    typewriter()
 
-    let j = 0
-
-    while(j <= currentWord.length) {
-      await new Promise(resolve => setTimeout(resolve, WORDWRITETIME * SECOND));
-      setMyMessage(currentWord.substring(0, j))
-      j++
-    }
-
-    if(MYMESSAGES.length - 1  < newIndex) {
-      setCursorClassName('hidden')
-    }
+    return () => { cancelled = true }
   }, [])
 
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const newIndex = (messageIndex + 1);
-      setMessageIndex(newIndex)
-      updateMyMessage(newIndex)
-    }, MYMESSAGES[messageIndex] != null ? (MYMESSAGES[messageIndex].message.length * (WORDDELETIONTIME + WORDWRITETIME) * SECOND + MYMESSAGES[messageIndex].time * SECOND) : 10 * SECOND);
+    let cancelled = false
+    let index = 0
 
-    return () => {
-      clearTimeout(timer);
-    };
+    const rotateQuality = async () => {
+      while (!cancelled) {
+        await sleep(5 * SECOND)
+        if (cancelled) return
 
-  }, [messageIndex, updateMyMessage]);
+        setQualitystyle('qualityFadeOut')
+        await sleep(0.5 * SECOND)
+        if (cancelled) return
 
+        index = (index + 1) % QUALITIES.length
+        setQuality(QUALITIES[index])
+        setQualitystyle('qualityFadeIn')
+      }
+    }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const newIndex = (currentQualityIndex + 1) % QUALITIES.length;
-      setCurrentQualityIndex(newIndex)
-      updateQuality(newIndex)
-    }, 5 * SECOND);
-    return () => { clearTimeout(timer); };
-  }, [currentQualityIndex, updateQuality]);
+    rotateQuality()
+
+    return () => { cancelled = true }
+  }, [])
 
 
   return (
@@ -92,7 +91,7 @@ function Home() {
         <link rel="canonical" href="http://aureliodurso.com" />
       </Helmet>
       <section>
-        <div /*onClick={updateMyMessage}*/ className='fadeIn'>
+        <div className='fadeIn'>
           <div className="bubble medium bottom">
             {myMessage} <div className={cursorClassName}></div>
           </div>
