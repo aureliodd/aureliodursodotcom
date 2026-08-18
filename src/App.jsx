@@ -14,7 +14,7 @@ function App() {
   const [currentTheme, setCurrentTheme] = useState('container')  
 
   useEffect(() => {
-    setCurrentTheme(currentTheme + ' ' + getPeriodOfTheYear())
+    setCurrentTheme((theme) => theme + ' ' + getPeriodOfTheYear())
   }, [])
 
   return (

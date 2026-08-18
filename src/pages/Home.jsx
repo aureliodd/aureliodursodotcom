@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { MYNAME, SECOND, WORDDELETIONTIME, WORDWRITETIME } from '../constants/constants.js'
 
@@ -7,11 +7,11 @@ import instagram from '../assets/instagram.png'
 import linkedin from '../assets/linkedin.png'
 import github from '../assets/github.png'
 
+const MYMESSAGES = JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES || '[]');
+const QUALITIES = JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES || '[]');
+
 function Home() {
 
-  const MYMESSAGES = JSON.parse(import.meta.env.VITE_REACT_APP_MYMESSAGES || '[]');
-  const QUALITIES = JSON.parse(import.meta.env.VITE_REACT_APP_QUALITIES || '[]');
-  
   const [myMessage, setMyMessage] = useState(MYMESSAGES[0].message)
   const [cursorClassName, setCursorClassName] = useState('cursor')
   const [messageIndex, setMessageIndex] = useState(0)
@@ -19,40 +19,16 @@ function Home() {
   const [quality, setQuality] = useState(QUALITIES[0])
   const [qualityStyle, setQualitystyle] = useState('')
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const newIndex = (messageIndex + 1);
-      setMessageIndex(newIndex)
-      updateMyMessage(newIndex)
-    }, MYMESSAGES[messageIndex] != null ? (MYMESSAGES[messageIndex].message.length * (WORDDELETIONTIME + WORDWRITETIME) * SECOND + MYMESSAGES[messageIndex].time * SECOND) : 10 * SECOND);
-
-    return () => {
-      clearTimeout(timer);
-    };
-
-  }, [messageIndex]);
-
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const newIndex = (currentQualityIndex + 1) % QUALITIES.length;
-      setCurrentQualityIndex(newIndex)
-      updateQuality(newIndex)
-    }, 5 * SECOND);
-    return () => { clearTimeout(timer); };
-  }, [currentQualityIndex]);
-
-
-  const updateQuality = async (newIndex) => {
+  const updateQuality = useCallback(async (newIndex) => {
     setQualitystyle('qualityFadeOut')
     await new Promise(resolve => setTimeout(resolve, 0.5 * SECOND));
     setQuality(QUALITIES[newIndex])
     setQualitystyle('qualityFadeIn')
-  }
+  }, [])
 
 
-  const updateMyMessage = async (newIndex) => {
-    
+  const updateMyMessage = useCallback(async (newIndex) => {
+
     if(newIndex > MYMESSAGES.length ) { return }
 
     let currentWord = MYMESSAGES[newIndex - 1].message
@@ -81,7 +57,31 @@ function Home() {
     if(MYMESSAGES.length - 1  < newIndex) {
       setCursorClassName('hidden')
     }
-  }
+  }, [])
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const newIndex = (messageIndex + 1);
+      setMessageIndex(newIndex)
+      updateMyMessage(newIndex)
+    }, MYMESSAGES[messageIndex] != null ? (MYMESSAGES[messageIndex].message.length * (WORDDELETIONTIME + WORDWRITETIME) * SECOND + MYMESSAGES[messageIndex].time * SECOND) : 10 * SECOND);
+
+    return () => {
+      clearTimeout(timer);
+    };
+
+  }, [messageIndex, updateMyMessage]);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const newIndex = (currentQualityIndex + 1) % QUALITIES.length;
+      setCurrentQualityIndex(newIndex)
+      updateQuality(newIndex)
+    }, 5 * SECOND);
+    return () => { clearTimeout(timer); };
+  }, [currentQualityIndex, updateQuality]);
 
 
   return (
